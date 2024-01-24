@@ -4,8 +4,6 @@ class NumberSelector {
   final FixedExtentScrollController scrollController;
   final BuildContext context;
   final String title;
-  final int index;
-  final int bodyIndex;
   final int extent;
   final Function(int) onSubmit;
 
@@ -13,8 +11,6 @@ class NumberSelector {
       {required this.scrollController,
       required this.context,
       required this.title,
-      required this.index,
-      required this.bodyIndex,
       required this.extent,
       required this.onSubmit});
 

@@ -51,7 +51,20 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<Map<String, dynamic>> profiles = [];
-  List<Panel> arr = [];
+  /*
+  - Profiles (list)
+	  - Profile (map)
+		  - name: Name
+      - numberOfToggled: No. of toggled
+      - operations: Operations (list)
+        - Operation (map)
+          - toggle: Toggle
+          - body: Body (list)
+            - No. of problems
+            - No. of digits
+  */
+
+  List<Panel> panels = [];
   int selectedProfileIndex = 0;
 
   List<String> profilesMenu = ["Edit..."];
@@ -66,6 +79,7 @@ class _HomePageState extends State<HomePage> {
 
   void initializeProfiles() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
     if (prefs.getString("profiles") == null) {
       createProfile("Default");
     } else {
@@ -82,34 +96,33 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       toggleAllState = toggleState;
 
-      for (var i = 0; i < arr.length; i++) {
-        var panel = arr[i];
+      for (var i = 0; i < panels.length; i++) {
+        var panel = panels[i];
         panel.toggle = toggleState;
         panel.controller.value = toggleState;
-        profiles[selectedProfileIndex]["data"][i]["toggle"] = toggleState;
+        profiles[selectedProfileIndex]["operations"][i]["toggle"] = toggleState;
       }
-      profiles[selectedProfileIndex]["numberToggled"] =
+      profiles[selectedProfileIndex]["numberOfToggled"] =
           toggleState ? format.length : 0;
     });
-    updateProfile();
+    saveProfilesToLocalStorage();
   }
 
   void createProfile(String name) {
     setState(() {
       profilesMenu.add(name);
       Map<String, dynamic> profile = {"name": name};
-      profile["data"] = [];
+      profile["operations"] = [];
       for (var operation in format) {
-        var body = [];
-        for (var i = 0; i < operation["body"].length; i++) {
-          body.add(5);
-        }
-        profile["data"].add({"toggle": false, "body": body});
+        profile["operations"].add({
+          "toggle": false,
+          "body": List.filled(operation["body"].length, 5)
+        });
       }
-      profile["numberToggled"] = 0;
+      profile["numberOfToggled"] = 0;
       profiles.add(profile);
     });
-    updateProfile();
+    saveProfilesToLocalStorage();
   }
 
   void editProfile(int index, String value) {
@@ -120,33 +133,33 @@ class _HomePageState extends State<HomePage> {
       profilesMenu[index + 1] = value;
       profiles[index]["name"] = value;
     });
-    updateProfile();
+    saveProfilesToLocalStorage();
   }
 
   void selectProfile(int index) {
     setState(() {
       selectedProfileMenu = profilesMenu[index + 1];
       selectedProfileIndex = index;
-      arr = format.map((operation) {
+      panels = format.map((operation) {
         List<List<dynamic>> body = [];
         for (var i = 0; i < operation["body"].length; i++) {
           body.add([
             operation["body"][i],
-            profiles[selectedProfileIndex]["data"][format.indexOf(operation)]
-                ["body"][i]
+            profiles[selectedProfileIndex]["operations"]
+                [format.indexOf(operation)]["body"][i]
           ]);
         }
         return Panel(
           title: operation["title"],
           body: body,
           controller: ExpandableController(),
-          toggle: profiles[selectedProfileIndex]["data"]
+          toggle: profiles[selectedProfileIndex]["operations"]
               [format.indexOf(operation)]["toggle"],
         );
       }).toList();
 
       // If all toggled/untoggled, change toggleAllState
-      toggleAllState = (profiles[index]["numberToggled"] == format.length);
+      toggleAllState = (profiles[index]["numberOfToggled"] == format.length);
     });
   }
 
@@ -155,10 +168,10 @@ class _HomePageState extends State<HomePage> {
       profiles.removeAt(index);
       profilesMenu.removeAt(index + 1);
     });
-    updateProfile();
+    saveProfilesToLocalStorage();
   }
 
-  void updateProfile() async {
+  void saveProfilesToLocalStorage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("profiles", jsonEncode(profiles));
   }
@@ -227,10 +240,10 @@ class _HomePageState extends State<HomePage> {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: 100),
-        itemCount: arr.length,
+        itemCount: panels.length,
         itemBuilder: (BuildContext context, int index) {
           return ExpandablePanel(
-              controller: arr[index].controller,
+              controller: panels[index].controller,
               collapsed: panelColumn(index, false),
               expanded: panelColumn(index, true));
         },
@@ -249,32 +262,32 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    arr[index].title,
+                    panels[index].title,
                     style: const TextStyle(fontSize: 24),
                   ),
                   Builder(builder: (context) {
                     // Toggle
                     return Switch(
-                        value: arr[index].toggle,
+                        value: panels[index].toggle,
                         onChanged: (value) {
                           setState(() {
-                            arr[index].toggle = value;
-                            profiles[selectedProfileIndex]["data"][index]
+                            panels[index].toggle = value;
+                            profiles[selectedProfileIndex]["operations"][index]
                                 ["toggle"] = value;
-                            arr[index].controller.toggle();
+                            panels[index].controller.toggle();
 
-                            // If toggled, increment/decrement numberToggled
-                            profiles[selectedProfileIndex]["numberToggled"] +=
+                            // If toggled, increment/decrement numberOfToggled
+                            profiles[selectedProfileIndex]["numberOfToggled"] +=
                                 value ? 1 : -1;
 
                             // If all toggled/untoggled, change toggleAllState
                             if (profiles[selectedProfileIndex]
-                                    ["numberToggled"] ==
+                                    ["numberOfToggled"] ==
                                 format.length) {
                               toggleAllState = value;
                             }
                           });
-                          updateProfile();
+                          saveProfilesToLocalStorage();
                         });
                   })
                 ],
@@ -283,34 +296,33 @@ class _HomePageState extends State<HomePage> {
                 ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: arr[index].body.length,
+                    itemCount: panels[index].body.length,
                     itemBuilder: (BuildContext context, int bodyIndex) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(arr[index].body[bodyIndex][0]),
+                          Text(panels[index].body[bodyIndex][0]),
                           ElevatedButton(
-                            child: Text("${arr[index].body[bodyIndex][1]}"),
+                            child: Text("${panels[index].body[bodyIndex][1]}"),
                             onPressed: () {
                               final FixedExtentScrollController
                                   scrollController =
                                   FixedExtentScrollController(
                                       initialItem:
-                                          arr[index].body[bodyIndex][1] - 1);
+                                          panels[index].body[bodyIndex][1] - 1);
                               NumberSelector(
                                   scrollController: scrollController,
                                   context: context,
                                   title: format[index]["body"][bodyIndex],
-                                  index: index,
-                                  bodyIndex: bodyIndex,
                                   extent: 10,
                                   onSubmit: (int value) {
                                     setState(() {
-                                      arr[index].body[bodyIndex][1] = value;
-                                      profiles[selectedProfileIndex]["data"]
-                                          [index]["body"][bodyIndex] = value;
+                                      panels[index].body[bodyIndex][1] = value;
+                                      profiles[selectedProfileIndex]
+                                              ["operations"][index]["body"]
+                                          [bodyIndex] = value;
                                     });
-                                    updateProfile();
+                                    saveProfilesToLocalStorage();
                                   }).dialog();
                             },
                           )

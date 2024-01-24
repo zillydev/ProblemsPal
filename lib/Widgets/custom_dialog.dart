@@ -5,7 +5,7 @@ class CustomDialog {
   final String title;
   final TextEditingController controller;
   final FocusNode node;
-  final List profiles;
+  final List<String> profiles;
   final Function(String) onSubmit;
   String? errorMessage;
 
