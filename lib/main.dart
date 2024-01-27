@@ -284,7 +284,9 @@ class _HomePageState extends State<HomePage> {
                             if (profiles[selectedProfileIndex]
                                     ["numberOfToggled"] ==
                                 format.length) {
-                              toggleAllState = value;
+                              toggleAllState = true;
+                            } else {
+                              toggleAllState = false;
                             }
                           });
                           saveProfilesToLocalStorage();

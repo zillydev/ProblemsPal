@@ -50,8 +50,8 @@ class GenerateProblemsScreen extends StatelessWidget {
     List<List<String>> problems = [];
     int index = 0;
     Random random = Random();
-    for (int i = 0; i < profile["data"].length; i++) {
-      Map<String, dynamic> operation = profile["data"][i];
+    for (int i = 0; i < profile["operations"].length; i++) {
+      Map<String, dynamic> operation = profile["operations"][i];
       if (operation["toggle"]) {
         List<int> body =
             (operation["body"] as List<dynamic>).map((e) => e as int).toList();
