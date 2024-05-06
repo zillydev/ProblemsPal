@@ -11,7 +11,6 @@ The Math Problems Generator is a Flutter application designed to help users gene
 
 ## Installation
 
-1. Clone the repository:
-`git clone https://github.com/yourusername/math-problems-generator.git`
+1. Clone the repository: `git clone https://github.com/zillydev/ProblemsPal.git`
 2. Open the project in your preferred Flutter IDE (e.g., Android Studio, VS Code).
 3. Run the application on an emulator or physical device.
