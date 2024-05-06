@@ -4,10 +4,10 @@ The Math Problems Generator is a Flutter application designed to help users gene
 
 ## Features
 
-- Addition, Subtraction, Multiplication, Division: Generate math problems for various operations.
-- Customizable Settings: Users can tweak the number of digits and the quantity of problems generated.
-- Profile Support: Multiple users can save their settings separately for a personalized experience.
-- Simple and Intuitive Interface: User-friendly design for easy navigation and interaction.
+- **Addition, Subtraction, Multiplication, Division:** Generate math problems for various operations.
+- **Customizable Settings:** Users can tweak the number of digits and the quantity of problems generated.
+- **Profile Support:** Multiple users can save their settings separately for a personalized experience.
+- **Simple and Intuitive Interface:** User-friendly design for easy navigation and interaction.
 
 ## Installation
 
