@@ -1,6 +1,6 @@
 # ProblemsPal
 
-The Math Problems Generator is a Flutter application designed to help users generate customizable math problems for practice. It supports addition, subtraction, multiplication, and division operations, allowing users to adjust the number of digits and the quantity of problems generated. Additionally, it includes profile support to enable multiple users to save their settings conveniently.
+ProblemsPal is a Flutter application designed to help users generate customizable math problems for practice. It supports addition, subtraction, multiplication, and division operations, allowing users to adjust the number of digits and the quantity of problems generated. Additionally, it includes profile support to enable multiple users to save their settings conveniently.
 
 ## Features
 
