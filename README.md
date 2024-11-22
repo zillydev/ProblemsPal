@@ -9,13 +9,9 @@ ProblemsPal is a Flutter application designed to help users generate customizabl
 - **Profile Support:** Multiple users can save their settings separately for a personalized experience.
 - **Simple and Intuitive Interface:** User-friendly design for easy navigation and interaction.
 
-## Screenshots
+## Demo Video
 
-![msedge_1vIOuVLc3a](https://github.com/user-attachments/assets/3f958047-dd45-4d96-9de4-0163547405de)
-
-![msedge_XJmC7hcHC9](https://github.com/user-attachments/assets/afc7f0f3-d1b2-4808-ae61-3f27fb0462a4)
-
-![msedge_zPjE5LmUic](https://github.com/user-attachments/assets/fc870d37-13c0-4a69-aba1-7afaaab06550)
+https://github.com/user-attachments/assets/14c20d35-ba0f-4d79-bbdb-79626ef177d2
 
 ## Installation
 
